@@ -1,5 +1,5 @@
 # Gym-Management-System-Flask
-Gym Management System using Flask &amp; My SQL
+Gym Management System using Flask , Bootstrap &amp; My SQL
 
 ## ER Diagram
 
