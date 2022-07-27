@@ -1,6 +1,13 @@
 # Gym-Management-System-Flask
 Gym Management System using Flask , Bootstrap &amp; My SQL
 
+### To run the application first create a virstual env 
+virtualenv venv
+### Then install dependencies from requirements.txt
+pip install requirements.txt
+### Then run 
+python run.py
+
 ## ER Diagram
 
 ![image](https://user-images.githubusercontent.com/68629215/181266467-6d12cf0f-018e-4153-a811-3316f003cfce.png)
