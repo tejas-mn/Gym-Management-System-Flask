@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Area | Account Login</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static' , filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static' , filename='css/style.css')}}" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> <i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <header id="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="text-center">Account Login</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="main"
+    style="background: url('https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'); 
+    background-size: cover; 
+    ">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <form id="login" action="/" class="well">
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Password" required>
+                  </div>
+                  <p ><a style="text-decoration:none;" href="" data-toggle="modal" data-target="#deleteEquipment">Forgot your Password?</a></p>
+                  <p> <input type="checkbox" name="remember" > Remember Me </p>
+
+                  
+                  <button type="submit" class="btn btn-primary btn-block">Login</button>
+                  <br/>
+                  <p >Don't have an account? <a style="text-decoration:none;  " href="/signin">Signin</a></p>
+                </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">
+      <p>Gym Management System | DBMS Project | 2022</p>
+    </footer>
+
+    <div class="modal fade" id="deleteEquipment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <form action="">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Forgot Password</h4>
+                  </div>
+
+                  <div class="modal-body">
+                    <form id="login" action="/" class="well">
+                      
+                      <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter Email" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" placeholder="Password" required>
+                      </div>
+    
+                      <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" class="form-control" placeholder="Password" required>
+                      </div>
+    
+
+                      <button type="submit" class="btn btn-primary btn-block">Reset</button>
+                  </form>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ url_for('static', filename='cdn/jquery.min.js')}}"></script> 
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>  </body>
+</html>

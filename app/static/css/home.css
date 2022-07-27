@@ -1,0 +1,128 @@
+
+.banner{
+    /*background: url('https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+    */
+    background: url(../images/banner.jpeg);
+    height:100vh;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction:column;
+    justify-content: center;
+    flex-wrap:wrap;
+    color:whitesmoke;
+}
+
+.heading-style{
+    font-family: fantasy;
+    font-style: oblique;
+}
+.dashboard-img{
+    max-width: 100%; max-height:100%;
+    object-fit:cover
+}
+
+p {
+color: white;
+text-align: justify;
+}
+
+h5 {
+color: white;
+}
+
+.navbar-default {
+background-color: #0a0a0d;
+border: none;
+}
+
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:focus {
+color: #ffffff;
+background-color: rgb(211, 72, 148);
+transition: 0.1s;
+border-bottom: 2px solid white;
+
+}
+
+.panel-body {
+
+background-color: #0a0a0d;
+}
+
+.well {
+background-color: transparent;
+border: none;
+}
+
+h2,
+h4 {
+color: white;
+}
+
+.feature {
+background-color: #0a0a0d;
+
+display: flex;
+flex-wrap: wrap;
+align-content: center;
+justify-content: center;
+align-items: center;
+
+}
+.box{
+transition: 0.2s ease-in-out;
+
+}
+.box:hover {
+transform: scale(1.01);
+transition: 2s ease-in-out;
+text-shadow: 10px 10px 20px  gold;
+box-shadow: 0px 0px 50px gold;
+
+background: linear-gradient(gold , goldenrod);
+
+
+}
+
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+  bottom: 30px;
+  left: 40px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+	box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    width: 50px;
+    height: 50px;
+    z-index: 2;
+    box-shadow: 0px 0px 10px black;
+    border-radius: 100%;
+    outline: none;
+    background-color:rgb(228, 121, 0);
+  }
+
+  .headings{
+    margin-bottom:0px;
+    font-size: 6rem; 
+    text-shadow: 0px  0px 90px  rgb(212, 0, 255); 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+     text-transform: uppercase;
+  }
+
+  .modal-dialog{
+    width: 75% !important;
+  }

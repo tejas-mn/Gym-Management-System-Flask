@@ -1,0 +1,105 @@
+{%extends "base2.html" %}
+{%block index %}
+<div class="col-md-9">
+  <!-- Website Overview -->
+  <div class="panel panel-default">
+    <div class="panel-heading main-color-bg">
+      <h3 class="panel-title">Profile Overview</h3> 
+    </div>
+    <div class="panel-body">
+      <div class="col-md-4">
+        <img src="{{url_for('static'  , filename='images/trainers/3.jpg')}}" alt="" style="width: 100%;  ">
+        <div class="panel-heading bg-primary" style="border: none;">
+            <input type="file" name="" id="" >
+        </div>
+      </div>
+      <br/>
+      <div class="col-md-8">
+        <form action="">
+
+                <div class="form-group">
+                    <label>GYM ID</label>
+                    <li class="list-group-item">{{gid}}</li>                                                      
+                </div>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <li class="list-group-item">{{name}}</li>                                                      
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label> 
+                    <li class="list-group-item">{{gender}}</li>                                                        
+
+                </div>
+                
+                <div class="form-group">
+                    <label>Join Date</label>
+                    <li class="list-group-item">{{doj}}</li>                                                      
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email Address</label>
+                    <li class="list-group-item">{{email}}</li>                                                      
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <li class="list-group-item">{{mob}}</li>                                                      
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <li class="list-group-item">{{location}}</li>                                                    
+                </div>
+
+                <div class="form-group">
+                    <label>Specializations</label>
+                    <select name="" id="" class="select2_single form-control" tabindex="-1">
+                            <option value=""></option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Exercises Conducted</label>
+                    <select name="" id="" class="select2_single form-control" tabindex="-1">
+                        <option value=""></option>
+                    </select>
+                </div>
+
+                
+                <div class="form-group">
+                  <label>My Trainer</label>
+                  <li class="list-group-item">{{location}}</li>                                                    
+              </div>
+
+              <div class="form-group">
+                <label>My Package</label>
+                <li class="list-group-item">{{location}}</li>                                                    
+            </div>
+            
+              <div class="form-group">
+                <label>My Equipments</label>
+                <select name="" id="" class="select2_single form-control" tabindex="-1">
+                        <option value=""></option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+              <label>My Exercises</label>
+              <select name="" id="" class="select2_single form-control" tabindex="-1">
+                      <option value=""></option>
+              </select>
+          </div>
+
+        </form>
+      </div>
+    
+    </div>
+  </div>
+
+</div>
+
+{% endblock index %}

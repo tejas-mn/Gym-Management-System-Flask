@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Area | Account Login</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static' , filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static' , filename='css/style.css')}}" rel="stylesheet">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> <i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <header id="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="text-center">Account SignIn</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="main"
+    style="background: url('https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'); 
+    background-size: cover; 
+    ">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <form id="login" action="/auth/signin" class="well" method="post">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="pswd" name="pswd" autocomplete="on" class="form-control" placeholder="Password" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="cpswd" name="cpswd" autocomplete="on" class="form-control" placeholder="Password" required>
+                  </div>
+
+                  
+                  <div class="form-group">
+                    <p id="StrengthDisp" class="bg-primary text-center" style=" display : none; padding: 10px; margin: auto; word-wrap: break-word; border-radius: 5px;" ></p>
+                  </div>
+                 
+                  <div class="form-group">
+                    <label>GYM ID</label>
+                    <input type="text" name="gid" class="form-control" placeholder="Enter GYM ID provided by gym" required>
+                  </div>
+                  
+                  <button  type="submit" id="sbtn" class="btn btn-primary btn-block">Signin</button>
+
+
+                  <div class="form-group">
+                    <br/>
+                    <p >Already have an account? <a  href="/login">Login</a></p>
+                  </div>
+
+              </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">
+      <p>Gym Management System | DBMS Project | 2022</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ url_for('static', filename='cdn/jquery.min.js')}}"></script> 
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script> 
+    <script type="text/javascript">
+      var valid = false;
+      $('input[type=password]').keyup(
+          function(){
+              var pswd  = $(this).val();
+
+              if(pswd.match('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')){
+                  $('#StrengthDisp').html("Weak").css("background-color","green")
+                  valid=true
+              }
+              else if(pswd.match('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')){
+                  $('#StrengthDisp').html("Strong").css("background-color","red")
+                  valid = true
+              }
+              else{
+                  $('#StrengthDisp').html("Password must be atleast 8 charcters long and should contain atleast 1 digit / lowercase / uppercase and special character").css("background-color","blue")
+                  valid=false
+              }
+          }
+      ).keyup(
+          function(){
+              //console.log(valid)
+              $('#StrengthDisp').show()
+          }
+      ).blur(
+          function(){
+              $('#StrengthDisp').hide()
+          }
+      )
+
+      $('.form').on("submit",function(e){
+          e.preventDefault();
+          if(!valid){
+              alert("Password too Weak!!")
+          }
+          else{
+              this.submit();
+          }
+      })
+
+      $('#cpswd').keyup(function(){
+        var cpswd  = $(this).val();
+        var pswd = $('#pswd').val();
+        var valid = false;
+        if(pswd=='' || cpswd=='' || pswd!=cpswd){
+            $('#StrengthDisp').html("passwords dont match").css("background-color","red")
+            valid=false
+        }else{
+          $('#StrengthDisp').html("passwords  match").css("background-color","green")
+          valid=true
+        }
+      }).keyup(
+        function(){
+            //console.log(valid)
+            $('#StrengthDisp').show()
+        }
+    ).blur(
+        function(){
+            $('#StrengthDisp').hide()
+        }
+    )
+
+
+  </script>
+  </body>
+</html>

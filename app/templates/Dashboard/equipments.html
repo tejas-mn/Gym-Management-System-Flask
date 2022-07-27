@@ -1,0 +1,278 @@
+{%extends "base.html" %}
+{%block equipments %}
+
+<div class="col-md-9">
+    <!-- Website Overview -->
+    <div class="panel panel-default">
+        <div class="panel-heading main-color-bg">
+            <h3 class="panel-title">Equipments</h3>
+        </div>
+        <div class="container mt-5" style="width:auto;">
+            <div class="container-xl">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+
+                        {% for category , messages in  get_flashed_messages(with_categories = True) %}
+                        {% if messages %}
+                        <div class="alert alert-{{category}} alert-dismissible fade in ">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{messages}}!</strong>
+                          </div>
+                        {% endif %}
+                        {% endfor %}
+
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-8"> 
+                                    <a class="btn btn-success" href="" data-toggle="modal" data-target="#addEquipment" >Add New Equipments</a>     
+                                    <a class = "btn btn-primary" href="" data-toggle="modal" data-target="#assignEquipment" >Assign Equipments to Members</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="search-box">
+                                        <i class="material-icons">&#xE8B6;</i>
+                                        <form action="/equipments/" method="post" autocomplete="off"> 
+                                            <input type="text" class="form-control" name="tag" id="tag"  placeholder="Search"/>                                                 
+                                       </form>                                     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name <i class="fa fa-sort"></i></th>
+                                    <th>Quantity</th>
+                                    <th>Cost <i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in Data_Paginate.items%}
+                                <tr>
+                                    <td>{{row.EQ_ID}}</td>
+                                    <td>{{row.EQ_NAME}}</td>
+                                    <td>{{row.EQ_QTY}}</td>
+                                    <td>{{row.EQ_COST}}</td>
+                                    <td>
+                                        <a href="#" class="view" title="View" data-toggle="modal" data-target="#viewEquipment{{row.EQ_ID}}" ><i class="material-icons">&#xE417;</i></a>
+                                        <a href="#" class="edit" title="Edit" data-toggle="modal" data-target="#editEquipment{{row.EQ_ID}}"><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#" class="delete" title="Delete" data-toggle="modal" data-target="#deleteEquipment{{row.EQ_ID}}"><i class="material-icons">&#xE872;</i></a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Delete Equipments -->
+                                <div class="modal fade" id="deleteEquipment{{row.EQ_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/equipments/delete_equipment/{{row.EQ_ID}}">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Equipment</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure to delete?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-primary">Yes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Edit Equipments -->
+                                <div class="modal fade" id="editEquipment{{row.EQ_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/equipments/edit_equipment/{{row.EQ_ID}}" method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Edit Equipment</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Equipment Name</label>
+                                                        <input name="eq_name" value="{{row.EQ_NAME}}" type="text" class="form-control" placeholder="Enter equipment name">
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label>Equipment Quantity</label>
+                                                        <input type="number" value="{{row.EQ_QTY}}" name="eq_qty" class="form-control" placeholder="Enter equipment quantity...">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Equipment cost(in ₹)</label>
+                                                        <input type="number" name="eq_cost" value="{{row.EQ_COST}}" class="form-control" placeholder="Enter equipment cost">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <!-- View Equipments -->
+                                <div class="modal fade" id="viewEquipment{{row.EQ_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Equipment Details</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Equipment Name</label>
+                                                        <li class="list-group-item">{{row.EQ_NAME}}</li>                                                      
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label>Equipment Quantity</label>
+                                                        <li class="list-group-item">{{row.EQ_QTY}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Equipment cost</label>
+                                                        <li class="list-group-item">₹{{row.EQ_COST}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="">Used by</label>
+                                                        <select name="usedBy" id="" class="select2_single form-control" tabindex="-1"   >
+                                                            {%for tuple in eq_tuples%}
+                                                                {%if tuple[2]==row.EQ_ID%}
+                                                            <option value="">{{tuple[0]}}</option>
+                                                                {%endif%}
+                                                            {%endfor%}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal" >Ok</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+
+                        <!--Pagination-->
+                        <div class="clearfix">
+                            <ul class="pagination">
+                                {%if Data_Paginate.has_prev%}
+                                <li class="page-item "><a href="{{Data_Paginate.page-1}}"><i class="fa fa-angle-double-left"></i></a></li>
+                                {%endif%}
+
+
+                                {% for page in Data_Paginate.iter_pages(left_edge=3,right_edge=3,left_current=3,right_current=3) %}
+                                {%if page%}
+                                <li class="page-item " id="page{{page}}"><a href="{{page}}" class="page-link">{{page}}</a></li>
+                                {%else%}
+                                ...
+                                {%endif%}
+                                {%endfor%}
+
+                                {%if Data_Paginate.has_next%}
+                                <li class="page-item"><a href="{{Data_Paginate.page+1}}" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                                {%endif%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modals -->
+
+<!-- Add Equipments -->
+<div class="modal fade" id="addEquipment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/equipments/add_equipment" , method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Equipment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Equipment Name</label>
+                        <input name="eq_name" type="text" class="form-control" placeholder="Enter equipment name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Equipment Quantity</label>
+                        <input name="eq_qty" type="number" class="form-control" placeholder="Enter equipment quantity...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Equipment cost(in ₹)</label>
+                        <input name="eq_cost" type="number" class="form-control" placeholder="Enter equipment cost">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--Assign Equipments-->
+<div class="modal fade" id="assignEquipment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/equipments/assign_equipment" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Assign Equipment to Members</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select Member</label>
+                        <select name="mem_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Member</option>
+                            {%for member in members%}
+                            <option value="{{member.M_ID}}">{{member.M_NAME}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Equipment</label>
+                        <select name="eq_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Equipment</option>
+                            {%for equipment in equipments%}
+                            <option value="{{equipment.EQ_ID}}">{{equipment.EQ_NAME}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type= "text/javascript" >
+    $("#page{{Data_Paginate.page}}").addClass("active");
+</script>
+
+{% endblock equipments%}

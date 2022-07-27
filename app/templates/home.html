@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{title}}</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+
+	<!--Custom css and table style-->
+	<link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/home.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/table.css')}}">
+
+	<!--Font Awesome and Material icons-->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="{{ url_for('static', filename='cdn/jquery.min.js')}}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+	
+	<!-- BS Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+
+	<style>
+		* {
+			scroll-behavior: smooth;
+			outline: 1px solid rgba(255, 255, 255, 0);
+		}
+			
+		body {
+			background-color: #0a0a0d;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<!--Navbar Starts-->
+	<nav class="navbar navbar-default">
+		<div class="container">
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+				<a class="navbar-brand" href="/"><i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM</a>
+			</div>
+
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#">Home</a></li>
+					<li><a href="#feat">Features</a></li>
+					<li><a href="#contact">Contact Us</a></li>
+					<li><a href="/dashboard">Dashboard</a></li>
+					
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					{% if session['username'] %}
+					<li><a href="/profile">{{session['username']}}</a></li>
+					<li><a href="/auth/logout">Logout</a></li>
+					{% else %}
+					<li><a href="/auth/login">Login</a></li>
+					{%endif%}
+				
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	<!--Navbar Ends-->
+
+	<!-- Container -->
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-12 banner">
+				<p class="text-center headings">Welcome to <i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM</p>
+				<p  style="font-style: oblique;">Get Better Get Stronger</p>
+			
+			</div>
+		</div>
+
+		<!-- Tagline -->
+		<div class="row" id="feat">
+			<div class="col-12">
+				<h1 class="text-center" style="font-family: fantasy;
+                font-style: oblique; text-shadow: 3px 3px 2px blue , -3px -3px 2px orangered ">OUR DASHBOARD</h1>
+			</div>
+		</div>
+
+		<!--Feature-->
+		<div class="row justify-content-evenly pt-3 pb-3 bg-primary">
+			<div class="panel-body feature">
+				<div class="col-md-8">
+					<div class="well text-center">
+						<img class="dashboard-img" src="{{ url_for('static', filename='images/dashboard.jpg')}}" alt="" >
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="well text-center">
+
+						<h1><i class="	glyphicon glyphicon-tasks " style="color: gold;"></i></h1>
+						<h5>Dashboard</h5>
+						<p>Our dashboard assists your gym administration and helps you organize data in the gym effectively. Gym management systems provide fitness businesses the functionality to manage schedules, memberships, and facilities. </p>
+						<div class="bt" style="margin-top: 1em;">
+							<a href="/dashboard" class="btn btn-primary" style="outline: none;">Explore our dashboard</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- Feature Ends -->
+
+		<!-- Tagline -->
+		<div class="row">
+			<div class="col-12">
+				<h2 class="text-center heading-style">PACKAGES</h2>
+			</div>
+		</div>
+
+		<!--Feature-->
+		<div class="row justify-content-evenly pt-3 pb-3 bg-primary">
+			<div class="panel-body text-primary text-center">
+				{% if display_packages%}
+				{%for pack in display_packages%}
+				<div class="col-md-3">
+					<div class="well box">
+						<h2><span></span>₹{{pack[2]}}</h2>
+						<h4>{{pack[1]}}</h4>
+					</div>
+				</div>
+        		{%endfor%}
+				{%endif%}
+			</div>
+		</div>
+		<!-- Feature Ends -->
+
+		<!-- Tagline -->
+		<div class="row">
+			<div class="col-12">
+				<h2 class="text-center heading-style" >OUR EQUIPMENTS</h2>
+			</div>
+		</div>
+
+		<!--Feature-->
+		<div class="row justify-content-evenly ">
+			<div class="panel-body text-center">
+				{% for x,y in eqp_tuples%}
+				<div class="col-md-3">
+					<div class="well ">
+						<img src="{{url_for('static'  , filename='images/equipments/' + y)}}" alt="" style="max-width: 70%;">
+						<h4>{{x}}</h4>
+					</div>
+				</div>
+				{%endfor%}
+			</div>
+		</div>
+		<!-- Feature Ends -->
+
+		<!-- Tagline -->
+		<div class="row">
+			<div class="col-12">
+				<h2 class="text-center heading-style">OUR TRAINERS</h2>
+			</div>
+		</div>
+
+		<!--Feature-->
+		<div class="row justify-content-evenly ">
+			<div class="panel-body text-center">
+				{% for x,y in trainer_tuples%}
+				<div class="col-md-3">
+					<div class="well ">
+						<img src="{{url_for('static'  , filename='images/trainers/'+y)}}" alt="" style="max-width: 70%;">
+						<h4>{{x}}</h4>
+					</div>
+				</div>
+				{%endfor%}
+				
+			</div>
+		</div>
+		<!-- Feature Ends -->
+
+		<!-- Tagline -->
+		<div class="row" id="contact">
+			<div class="col-12">
+				<h1 class="text-center heading-style ">CONTACT US</h1>
+			</div>
+		</div>
+
+		<!--Feature-->
+		<div class="row justify-content-evenly">
+			<div class="panel-body  ">
+				<div class="col-md-8 ">
+					<div style="overflow:hidden;max-width:100%;">
+						<div id="display-googlemap" style="max-width:100%;height:400px">
+							<iframe style="width:100%;border:0; height:100%;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=america&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4 ">
+					<form style="margin: 20px;">
+						<div class="form-group">
+							<label for="exampleInputName">Name</label>
+							<input type="text" class="form-control" id="exampleInputName" placeholder="Your Name">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail">Email</label>
+							<input type="email" class="form-control" id="exampleInputEmail" placeholder="Your Email">
+						</div>
+						<div class="form-outline">
+							<label class="form-label" for="textAreaExample2">Message</label>
+							<textarea class="form-control" id="textAreaExample2" rows="4" placeholder="Write your message here..."></textarea>
+
+						</div>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="exampleCheck1">
+							<label for="exampleCheck1">Send me latest updates and news</label>
+						</div>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+		<!-- Feature Ends -->
+	</div>
+	<!-- Container Ends -->
+
+	<!--Scroll to top-->
+	<button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top">
+		<i class="glyphicon glyphicon-chevron-up"></i>
+	</button>
+
+	<footer id="footer"><p style="text-align: center;">				
+		<i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM | Gym Management System | DBMS Project | 2022</p>
+	</footer>
+	
+		<script src="{{ url_for('static', filename='js/scroll.js')}}"></script>
+</body>
+</html>

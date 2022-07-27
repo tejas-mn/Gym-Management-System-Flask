@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Area | Account Login</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static' , filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static' , filename='css/style.css')}}" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> <i class="glyphicon glyphicon-fire" style="color: rgb(228, 121, 0);"> </i>TGYM</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <header id="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="text-center">Account Login</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="main"
+    style="background: url('https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'); 
+    background-size: cover; 
+    ">
+    {% for category , messages in  get_flashed_messages(with_categories = True) %}
+    {% if messages %}
+    <div class="alert alert-{{category}} alert-dismissible fade in col-md-12 " id="flash">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>{{messages}}!</strong>
+        </div>
+    {% endif %}
+    {% endfor %}
+
+    <h2> {{msg}}</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <form id="login" action="/auth/login" class="well" method="post">
+
+                <div class="form-group">
+                    <label>GYM ID</label>
+                    <input type="text" name="gid" class="form-control" placeholder="Enter GYM ID provided by gym" required>
+                  </div>
+                  
+                  
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" value="{%if 'usr' in request.cookies %}{{request.cookies.get('usr')}}{% endif %}" class="form-control" placeholder="Enter name" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="pswd" value="{% if 'pwd' in request.cookies %}{{request.cookies.get('pwd')}}{% endif %}" class="form-control" placeholder="Password" required>
+                  </div>
+                  <p ><a style="text-decoration:none;" href="" data-toggle="modal" data-target="#deleteEquipment">Forgot your Password?</a></p>
+                  <p> <input type="checkbox" name="remember" > Remember Me </p>
+
+                  
+                  <button type="submit" class="btn btn-primary btn-block">Login</button>
+                  <br/>
+                  <p >Don't have an account? <a style="text-decoration:none;  " href="/signin">Signin</a></p>
+                </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">
+      <p>Gym Management System | DBMS Project | 2022</p>
+    </footer>
+
+    <div class="modal fade" id="deleteEquipment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                   <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Forgot Password</h4>
+                  </div>
+
+                  <div class="modal-body">
+                    <form id="forg" action="/auth/reset"  class="well"  method="POST">
+                      
+                      <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="nemail" name="email" class="form-control" placeholder="Enter Email" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="new_password" name="pswd" class="form-control" placeholder="Password" required>
+                      </div>
+    
+                      <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirm_password" name="cpswd" class="form-control" placeholder="Password" required>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary btn-block">Reset</button>
+                  </form>
+                  </div>
+              
+          </div>
+      </div>
+  </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ url_for('static', filename='cdn/jquery.min.js')}}"></script> 
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>  
+  
+  
+  
+    <script type="text/javascript">
+        
+      ms = "{{msg}}"
+      if (ms) {
+          alert(ms);
+      }
+
+      $('#forg').submit(function(e){
+                  e.preventDefault();
+                  var email = $('#nemail').val()
+                  var new_password = $('#new_password').val()
+                  var confirm_password = $('#confirm_password').val()
+                  var validr = false;  
+
+                  alert(confirm_password);
+  
+                  if(new_password.match('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')){validr=true}
+                   else if(new_password.match('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')){validr = true}
+                   else{validr=false}
+
+                  if(email!="" && validr){
+                  if(new_password===confirm_password ){
+                  $.ajax(
+                      {
+                          url : '/auth/reset',
+                          type : 'POST',
+                          data : {email:email,new_password:new_password,confirm_password:confirm_password},                        
+                          success: function(d)
+                                  {
+                                      alert(d.status)
+                                      window.location = '/auth/login'
+                                  }
+                      });
+                    }
+                  else{alert("Passwords don't Match")}
+       //          else{ alert("Password too weak!!")}
+    //              else{alert("Please Enter the email Address")}
+                
+                }
+              });
+
+    </script>
+
+  </body>
+</html>

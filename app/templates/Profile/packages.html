@@ -1,0 +1,283 @@
+{%extends "base.html" %}
+{%block packages %}
+
+<div class="col-md-9">
+    <!-- Website Overview -->
+    <div class="panel panel-default">
+        <div class="panel-heading main-color-bg">
+            <h3 class="panel-title">Packages</h3>
+        </div>
+        <div class="container mt-5" style="width:auto;">
+
+            <div class="container-xl">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+
+                        {% for category , messages in  get_flashed_messages(with_categories = True) %}
+                        {% if messages %}
+                        <div class="alert alert-{{category}} alert-dismissible fade in ">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{messages}}!</strong>
+                          </div>
+                        {% endif %}
+                        {% endfor %}
+
+                        <!--Table Header & Search-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-8"> <a class="btn btn-success" data-toggle="modal" data-target="#addPackage">Add New Package</a></div>
+
+                                <div class="col-sm-4">
+                                    <div class="search-box">
+                                        <i class="material-icons">&#xE8B6;</i>
+                                        <form action="/packages/" method="post" autocomplete="off"> 
+                                            <input type="text" class="form-control" name="tag" id="tag"  placeholder="Search"/>                                                 
+                                       </form>                                     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name <i class="fa fa-sort"></i></th>
+                                    <th>Price</th>
+                                    <th>Duration (in months) <i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in Data_Paginate.items%}
+                                <tr>
+                                    <td>{{row.P_ID}}</td>
+                                    <td>{{row.P_NAME}}</td>
+                                    <td>{{row.P_PRICE}}</td>
+                                    <td>{{row.P_DURATION}}</td>
+                                    <td>
+                                        <a href="#" class="view" title="View" data-toggle="modal" data-target="#viewPackage{{row.P_ID}}" ><i class="material-icons">&#xE417;</i></a>
+                                        <a href="#" class="edit" title="Edit" data-toggle="modal" data-target="#editPackage{{row.P_ID}}"><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#" class="delete" title="Delete" data-toggle="modal" data-target="#deletePackage{{row.P_ID}}"><i class="material-icons">&#xE872;</i></a>
+                                    </td>
+                                </tr>
+
+                                
+                                <!-- Edit Packages -->
+                                <div class="modal fade" id="editPackage{{row.P_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/packages/edit_package/{{row.P_ID}}" , method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Edit Package</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Package Name</label>
+                                                        <input name="p_name" type="text" class="form-control" placeholder="Enter package name" value="{{row.P_NAME}}">
+                                                    </div>
+                                                    
+                                                
+                                                    <div class="form-group">
+                                                        <label>Package Price (in ₹)</label>
+                                                        <input name="p_price" type="number" class="form-control" placeholder="Enter package price..." value="{{row.P_PRICE}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Package Duration(in months)</label>
+                                                        <input name="p_duration" type="number" class="form-control" placeholder="Enter package duration(in months)..." value="{{row.P_DURATION}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Exercises Added</label>
+                                                        <select name="" id="exerciseAdded{{row.P_ID}}" class="select2_single form-control" tabindex="-1">
+                                                            {%for tuple in ex_tuples%}
+                                                                {%if tuple[2]==row.P_ID%}
+                                                            <option value="{{tuple[2]}} {{tuple[3]}}">{{tuple[0]}}</option>
+                                                                {%endif%}
+                                                            {%endfor%}
+                                                        </select>
+                                                    </div>
+
+                                                    <button  type="button" onclick="deleteExercise('{{row.P_ID}}');" class="btn btn-danger">Delete Exercise</button>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Package -->
+                                <div class="modal fade" id="deletePackage{{row.P_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/packages/delete_package/{{row.P_ID}}" , method="get">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Package</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure to delete?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-primary">Yes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Packages -->
+                                <div class="modal fade" id="viewPackage{{row.P_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">View Package</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Package Name</label>
+                                                        <li class="list-group-item">{{row.P_NAME}}</li>                                                      
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label>Package Price</label>
+                                                        <li class="list-group-item">₹{{row.P_PRICE}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Package Duration(in months)</label>
+                                                        <li class="list-group-item">{{row.P_DURATION}}</li>                                                      
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label>Exercises Added</label>
+                                                        <select name="" id="" class="select2_single form-control" tabindex="-1">
+                                                            {%for tuple in ex_tuples%}
+                                                                {%if tuple[2]==row.P_ID%}
+                                                            <option value="">{{tuple[0]}}</option>
+                                                                {%endif%}
+                                                            {%endfor%}
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+
+                        
+                        <!--Pagination-->
+                        <div class="clearfix">
+                            <ul class="pagination">
+                                {%if Data_Paginate.has_prev%}
+                                <li class="page-item "><a href="{{Data_Paginate.page-1}}"><i class="fa fa-angle-double-left"></i></a></li>
+                                {%endif%}
+
+                               
+                                {% for page in Data_Paginate.iter_pages(left_edge=3,right_edge=3,left_current=3,right_current=3) %}
+                                {%if page%}
+                                <li class="page-item " id="page{{page}}"><a href="{{page}}" class="page-link">{{page}}</a></li>
+                                {%else%}
+                                ...
+                                {%endif%}
+                                {%endfor%}
+
+                                {%if Data_Paginate.has_next%}
+                                <li class="page-item"><a href="{{Data_Paginate.page+1}}" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                                {%endif%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                        
+    </div>
+    </div>
+</div>
+<!-- Modals -->
+
+<!-- Add Packages -->
+<div class="modal fade" id="addPackage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/packages/add_package" , method="post">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Package</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Package Name</label>
+                        <input name = "p_name" type="text" class="form-control" placeholder="Enter package name">
+                    </div>
+                    
+                
+                    <div class="form-group">
+                        <label>Package Price (in ₹)</label>
+                        <input name="p_price" type="number" class="form-control" placeholder="Enter package price" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Package Duration(in months)</label>
+                        <input name="p_duration" type="number" class="form-control" placeholder="Enter package duration(in months)" >
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type= "text/javascript" >
+    $("#page{{Data_Paginate.page}}").addClass("active");
+    
+    function deleteExercise(pid){
+        var e_id = $('#exerciseAdded'+pid).find(":selected").val();
+        //const arr = e_id.split(" ");
+        var txt = $('#exerciseAdded'+pid).find(":selected").text();
+        
+        if(e_id == null){
+            alert('No Exercises added')
+        }
+        else
+        {
+            fetch( '/packages/delete_consist/' + e_id)
+            .then( response => response.json() )
+            .then( response => {
+                // Do something with response.
+                //alert('/packages/delete_consist/'+e_id);
+                var x = document.getElementById("exerciseAdded"+pid);  
+                alert("Removed "+txt+" from the package")
+                x.remove(x.selectedIndex); 
+            } );
+        }
+           //$("#exerciseAdded option[value=${}]").remove(); 
+    }
+</script>
+
+{% endblock packages %}

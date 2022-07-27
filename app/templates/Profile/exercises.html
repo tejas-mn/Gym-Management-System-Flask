@@ -1,0 +1,375 @@
+{%extends "base.html" %}
+{%block exercises %}
+
+<div class="col-md-9">
+    <!-- Website Overview -->
+    <div class="panel panel-default">
+        <div class="panel-heading main-color-bg">
+            <h3 class="panel-title">Exercises</h3>
+        </div>
+        <div class="container mt-5" style="width:auto;">
+            <div class="container-xl">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        
+                    {% for category , messages in  get_flashed_messages(with_categories = True) %}
+                    {% if messages %}
+                    <div class="alert alert-{{category}} alert-dismissible fade in " id="flash">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>{{messages}}!</strong>
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-8"> 
+                                    <a class="btn btn-success" href="" data-toggle="modal" data-target="#addExercise" >Add New Exercise</a>
+
+                                        <div class="dropdown create" style="float:right;">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                Options
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <li><a href="" type="button" data-toggle="modal" data-target="#addExerciseToPackage">Add Exercises to Package </a></li>
+                                                <li><a  href="" type="button" data-toggle="modal" data-target="#assignExerciseToTrainer"> Assign Exercises to Trainers</a></li>
+                                                <li><a href="" type="button" data-toggle="modal" data-target="#assignExerciseToMember">Assign Exercises to Members</a></li>
+                                            </ul>
+                                        </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="search-box">
+                                        <i class="material-icons">&#xE8B6;</i>
+                                        <form action="/exercises/" method="post" autocomplete="off"> 
+                                             <input type="text" class="form-control" name="tag" id="tag"  placeholder="Search"/>                                                 
+                                        </form>                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name <i class="fa fa-sort"></i></th>
+                                    <th>Type</th>
+                                    <th>TimeSlot <i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in Data_Paginate.items%}
+                                <tr id="row{{row.E_ID}}">
+                                    <td>{{row.E_ID}}</td>
+                                    <td>{{row.E_NAME}}</td>
+                                    <td>{{row.E_TYPE}}</td>
+                                    <td>{{row.E_TIMESLOT}}</td>
+                                    <td>
+                                        <a href="#" class="view" title="View" data-toggle="modal" data-target="#viewExercise{{row.E_ID}}"><i class="material-icons">&#xE417;</i></a>
+                                        <a href="#"  class="edit" title="Edit" data-toggle="modal" data-target="#editExercise{{row.E_ID}}"  ><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#" class="delete" title="Delete"  data-toggle="modal" data-target="#deleteExercise{{row.E_ID}}"><i class="material-icons">&#xE872;</i></a>
+                                    </td>
+                                </tr>
+
+                                <!-- Edit Exercises-->
+                                <div class="modal fade" id="editExercise{{row.E_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/exercises/edit_exercise/{{row.E_ID}}" , method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Edit Exercise</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Exercise Name</label>
+                                                        <input type="text" name="e_name" value="{{row.E_NAME}}" class="form-control" placeholder="Enter exercise name">
+                                                    </div>
+                                                 
+                                                    <div class="form-group">
+                                                        <label>Exercise Type</label>
+                                                        <input type="text" name="e_type" value="{{row.E_TYPE}}" class="form-control" placeholder="Enter exercise type">
+                                                    </div>
+                                
+                                                    <div class="form-group">
+                                                        <label>Exercise TimeSlot</label>
+                                                        <input type="time" name="e_timeslot" value="{{row.E_TIMESLOT}}" class="form-control" placeholder="Enter exercise time" step="2">
+                                                    </div>
+                                                </div>
+                                                
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--View Exercise-->
+                                <div class="modal fade" id="viewExercise{{row.E_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="" , method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Exercise Details</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Exercise Name</label>
+                                                        <li class="list-group-item">{{row.E_NAME}}</li>                                                      
+                                                    </div>
+                                                 
+                                                    <div class="form-group">
+                                                        <label>Exercise Type</label>
+                                                        <li class="list-group-item">{{row.E_TYPE}}</li>                                                      
+                                                    </div>
+                                
+                                                    <div class="form-group">
+                                                        <label>Exercise TimeSlot</label>
+                                                        <li class="list-group-item">{{row.E_TIMESLOT}}</li>                                                      
+                                                    </div>
+                                                </div>
+                                                
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Exercise-->
+                                <div class="modal fade" id="deleteExercise{{row.E_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/exercises/delete_exercise/{{row.E_ID}}" id="deleteform">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Exercise</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure to delete?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                    <button type="submit" id="deletebtn" class="btn btn-primary">Yes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                               
+                            </tbody>
+                        </table>
+
+                       <!--Pagination-->
+                       <div class="clearfix">
+                                <ul class="pagination">
+                                    {%if Data_Paginate.has_prev%}
+                                    <li class="page-item "><a href="{{Data_Paginate.page-1}}"><i class="fa fa-angle-double-left"></i></a></li>
+                                    {%endif%}
+
+                                
+                                    {% for page in Data_Paginate.iter_pages(left_edge=3,right_edge=3,left_current=3,right_current=3) %}
+                                    {%if page%}
+                                    <li class="page-item " id="page{{page}}"><a href="{{page}}" class="page-link">{{page}}</a></li>
+                                    {%else%}
+                                    ...
+                                    {%endif%}
+                                    {%endfor%}
+
+                                    {%if Data_Paginate.has_next%}
+                                    <li class="page-item"><a href="{{Data_Paginate.page+1}}" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                                    {%endif%}
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        
+<!-- Modals -->
+
+<!-- Add Exercise -->
+<div class="modal fade" id="addExercise" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/exercises/add_exercise" , method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Exercise</h4>
+                </div>
+                
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Exercise Name</label>
+                            <input type="text" name="e_name" class="form-control" placeholder="Enter exercise name">
+                        </div>
+                     
+                        <div class="form-group">
+                            <label>Exercise Type</label>
+                            <input type="text" name="e_type" class="form-control" placeholder="Enter exercise type">
+                        </div>
+    
+                        <div class="form-group">
+                            <label>Exercise TimeSlot</label>
+                            <input type="time" name="e_timeslot" class="form-control" placeholder="Enter exercise time" step="2">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--Assign Equipments-->
+<div class="modal fade" id="assignExerciseToMember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/exercises/assign_exercise_to_member" , method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Assign Exercises to Members</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select Exercise</label>
+                        <select name="ex_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Exercise</option>
+                            {%for exercise in exercises%}    
+                            <option value="{{exercise.E_ID}}">{{exercise.E_NAME}}</option>
+                            {%endfor%}
+                        </select>                       
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Member</label>
+                        <select name="mem_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Member</option>
+                            {%for member in members%}    
+                            <option value="{{member.M_ID}}">{{member.M_NAME}}</option>
+                            {%endfor%}
+                        </select>                           
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Assign Equipments-->
+<div class="modal fade" id="assignExerciseToTrainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/exercises/assign_exercise_to_trainer" , method="post">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Assign Exercises to Trainer</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select Exercise</label>
+                        <select name="ex_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Exercise</option>
+                            {%for exercise in exercises%}    
+                            <option value="{{exercise.E_ID}}">{{exercise.E_NAME}}</option>
+                            {%endfor%}
+                        </select>                          
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Trainer</label>
+                        <select name="tr_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Trainer</option>
+                            {%for trainer in trainers%}    
+                            <option value="{{trainer.T_ID}}">{{trainer.T_NAME}}</option>
+                            {%endfor%}
+                        </select>                         
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--addExerciseToPackage-->
+<div class="modal fade" id="addExerciseToPackage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/exercises/add_exercise_to_package" , method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Exercises to Package</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select Exercise</label>
+                        <select name="ex_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Exercise</option>
+                            {%for exercise in exercises%}    
+                            <option value="{{exercise.E_ID}}">{{exercise.E_NAME}}</option>
+                            {%endfor%}
+                        </select>                          
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Package</label>
+                        <select name="pk_id" class="select2_single form-control" tabindex="-1">
+                            <option value="">Select Package</option>
+                            {%for package in packages%}    
+                            <option value="{{package.P_ID}}">{{package.P_NAME}}</option>
+                            {%endfor%}
+                        </select>                           
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type= "text/javascript" >
+    $("#page{{Data_Paginate.page}}").addClass("active");
+    setInterval(
+        function(){
+            $('#flash').fadeOut(1800);
+        }, 
+        4000
+    )
+    
+</script>
+
+{%endblock exercises %}

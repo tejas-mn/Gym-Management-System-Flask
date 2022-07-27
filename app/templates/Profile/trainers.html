@@ -1,0 +1,376 @@
+{%extends "base.html" %}
+{%block trainers %}
+
+<div class="col-md-9">
+    <!-- Website Overview -->
+    <div class="panel panel-default">
+        <div class="panel-heading main-color-bg">
+            <h3 class="panel-title">Trainers</h3>
+        </div>
+
+        <!--Table Starts-->
+        <div class="container mt-5" style="width:auto;">
+
+            <div class="container-xl">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+
+                        {% for category , messages in  get_flashed_messages(with_categories = True) %}
+                        {% if messages %}
+                        <div class="alert alert-{{category}} alert-dismissible fade in ">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{messages}}!</strong>
+                          </div>
+                        {% endif %}
+                        {% endfor %}
+
+                        <!--Table Header & Search-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <a class="btn btn-success" data-toggle="modal" data-target="#addTrainer" >Add New Trainer</a>
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#addSpecialization" style="float:right">Add Specilaization</a>
+                                </div>
+
+
+                                <div class="col-sm-4">
+                                    <div class="search-box">
+                                        <i class="material-icons">&#xE8B6;</i>
+                                        <form action="/trainers/" method="post" autocomplete="off"> 
+                                            <input type="text" class="form-control" name="tag" id="tag"  placeholder="Search"/>                                                 
+                                       </form>                                     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                   <th>#</th>
+                                    <th>Name <i class="fa fa-sort"></i></th>
+                                    <th>Gender</th>
+                                    <th>Joindate <i class="fa fa-sort"></i></th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in Data_Paginate.items%}
+                                <tr>
+                                    <td>{{row.T_ID}}</td>
+                                    <td>{{row.T_NAME}}</td>
+                                    <td>{{row.T_GENDER}}</td>
+                                    <td>{{row.T_JOINDATE}}</td>
+                                    <td>{{row.T_EMAIL}}</td>
+                                    <td>{{row.T_MOB_NO}}</td>
+                                    <td>
+                                        <a href="#" class="view" title="View" data-toggle="modal" data-target="#viewTrainer{{row.T_ID}}"><i class="material-icons">&#xE417;</i></a>
+                                        <a href="#"  class="edit" title="Edit" data-toggle="modal" data-target="#editTrainer{{row.T_ID}}"  ><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#" class="delete" title="Delete"  data-toggle="modal" data-target="#deleteTrainer{{row.T_ID}}"><i class="material-icons">&#xE872;</i></a>
+                                    </td>
+                                </tr>
+
+                                <!-- Delete Trainer -->
+                                <div class="modal fade" id="deleteTrainer{{row.T_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/trainers/delete_trainer/{{row.T_ID}}" , method="get">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Trainer</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure to delete?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-primary">Yes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Edit Trainer -->
+                                <div class="modal fade" id="editTrainer{{row.T_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/trainers/edit_trainer/{{row.T_ID}}" , method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Edit Trainer</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Trainer Name</label>
+                                                        <input type="text" value="{{row.T_NAME}}" name="t_name" class="form-control" placeholder="Enter Trainer Name" maxlength="45">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Gender</label>
+                                                        {% if row.T_GENDER == 'M'%}
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" id="customRadioInline1" name="t_gender" value = "M" class="custom-control-input" checked="checked" >
+                                                            <label class="custom-control-label" for="customRadioInline1">Male</label>
+                                                            
+                                                            <input type="radio" id="customRadioInline2" name="t_gender" value="F" class="custom-control-input">
+                                                            <label class="custom-control-label" for="customRadioInline2">Female</label>
+                                                        </div>
+                                                        {% else %}
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" id="customRadioInline1" name="t_gender" value = "M" class="custom-control-input" >
+                                                            <label class="custom-control-label" for="customRadioInline1">Male</label>
+
+                                                            <input type="radio" id="customRadioInline2" name="t_gender" value="F" class="custom-control-input" checked="checked" >
+                                                            <label class="custom-control-label" for="customRadioInline2">Female</label>
+                                                        </div>
+                                                        {%endif%}
+
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Email Address</label>
+                                                        <input type="email" value = "{{row.T_EMAIL}}" name="t_email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" maxlength="20">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Mobile Number</label>
+                                                        <input type="tel" value="{{row.T_MOB_NO}}" name="t_mob_no" class="form-control" placeholder="Enter your Mobile Number" maxlength="14" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Location</label>
+                                                        <input type="text" name="t_location" value="{{row.T_LOCATION}}" class="form-control" placeholder="Enter your Location" maxlength="15">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Date of Joining</label>
+                                                        <input class="form-control" style="font-family:Roboto, sans-serif;" name="t_joindate" type="date" value="{{row.T_JOINDATE}}">
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Trainer -->
+                                <div class="modal fade" id="viewTrainer{{row.T_ID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Trainer Details</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Trainer Name</label>
+                                                        <li class="list-group-item">{{row.T_NAME}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Gender</label>
+                                                        {% if row.T_GENDER == 'M'%}
+                                                        <li class="list-group-item">Male</li>  
+                                                        {% else %}
+                                                        <li class="list-group-item">Female</li>  
+                                                        {%endif%}
+
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label>Join Date</label>
+                                                        <li class="list-group-item">{{row.T_JOINDATE}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Email Address</label>
+                                                        <li class="list-group-item">{{row.T_EMAIL}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Mobile Number</label>
+                                                        <li class="list-group-item">{{row.T_MOB_NO}}</li>                                                      
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Location</label>
+                                                        <li class="list-group-item">{{row.T_LOCATION}}</li>                                                    
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                       <label>Specializations</label>
+                                                       <select name="" id="" class="select2_single form-control" tabindex="-1">
+                                                        {% for spec in specs%}
+                                                            {%if spec.TR_ID == row.T_ID%}
+                                                                <option value="">{{spec.T_SPEC}}</option>
+                                                            {%endif%}
+                                                        {%endfor%}
+                                                       </select>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Exercises Conducted</label>
+                                                        <select name="" id="" class="select2_single form-control" tabindex="-1">
+                                                          {% for tuple in ex_tuples%}
+                                                            {% if tuple[2] == row.T_ID%}
+                                                            <option value="">{{tuple[0]}}</option>
+                                                             {%endif%}
+                                                           {%endfor%}
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                        <!--Pagination-->
+                        <div class="clearfix">
+                            <ul class="pagination">
+                                {%if Data_Paginate.has_prev%}
+                                <li class="page-item "><a href="{{Data_Paginate.page-1}}"><i class="fa fa-angle-double-left"></i></a></li>
+                                {%endif%}
+
+
+                                {% for page in Data_Paginate.iter_pages(left_edge=3,right_edge=3,left_current=3,right_current=3) %}
+                                {%if page%}
+                                <li class="page-item " id="page{{page}}"><a href="{{page}}" class="page-link">{{page}}</a></li>
+                                {%else%}
+                                ...
+                                {%endif%}
+                                {%endfor%}
+
+                                {%if Data_Paginate.has_next%}
+                                <li class="page-item"><a href="{{Data_Paginate.page+1}}" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                                {%endif%}
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+
+<!-- Add Trainer -->
+<div class="modal fade" id="addTrainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/trainers/add_trainer" , method="post">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Trainer</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Trainer Name</label>
+                        <input type="text" name="t_name" class="form-control" placeholder="Enter Trainer Name" maxlength="45">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender</label>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline1" name="t_gender" value = "M" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline1">Male</label>
+                 
+                            <input type="radio" id="customRadioInline2" name="t_gender" value="F" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2">Female</label>
+                        </div>
+
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email Address</label>
+                        <input type="email" name="t_email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" maxlength="20">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" name="t_mob_no" class="form-control" placeholder="Enter your Mobile Number" maxlength="14" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" name="t_location" class="form-control" placeholder="Enter your Location" maxlength="15">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Joining</label>
+                        <input class="form-control" style="font-family:Roboto, sans-serif;" name="t_joindate" type="date">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Specialization -->
+<div class="modal fade" id="addSpecialization" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/trainers/add_spec" , method="post"> 
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Specialization</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select Trainer</label>
+                        <select name="t_id" class="select2_single form-control" tabindex="-1">
+                            <option>Select Trainer..</option>
+                            {% for row in rows%}
+                            <option  value="{{row.T_ID}}">{{row.T_NAME}}</option>
+                            {% endfor %}
+                          </select>                      
+                    </div>
+
+                    <div class="form-group">
+                        <label>Specialization </label>
+                        <input name="t_spec" type="text" class="form-control" placeholder="Enter Specialization">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type= "text/javascript" >
+    $("#page{{Data_Paginate.page}}").addClass("active");
+</script>
+
+{% endblock trainers %}
